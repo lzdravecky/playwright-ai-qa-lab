@@ -3,32 +3,31 @@ import { ProductsPage } from '../pages/ProductsPage'
 import { CheckoutPage } from '../pages/CheckoutPage'
 
 type MyFixtures = {
-    productsPage: ProductsPage
-    checkoutPage: CheckoutPage
-    cleanCart: void
+  productsPage: ProductsPage
+  checkoutPage: CheckoutPage
+  cleanCart: void
 }
 
 export const test = base.extend<MyFixtures>({
-    productsPage: async ({ page }, use) => {
-        const productsPage = new ProductsPage(page)
+  productsPage: async ({ page }, use) => {
+    const productsPage = new ProductsPage(page)
 
-        await use(productsPage)
-    },
+    await use(productsPage)
+  },
 
-    checkoutPage: async ({ page }, use) => {
-        const checkoutPage = new CheckoutPage(page)
+  checkoutPage: async ({ page }, use) => {
+    const checkoutPage = new CheckoutPage(page)
 
-        await use(checkoutPage)
-    },
+    await use(checkoutPage)
+  },
 
-    cleanCart: async ({ request }, use) => {
-        const response = await request.delete('/api/cart')
+  cleanCart: async ({ request }, use) => {
+    const response = await request.delete('/api/cart')
 
-        if (!response.ok()) {
-            throw new Error('Failed to reset cart')
-        }
-
-        await use()
+    if (!response.ok()) {
+      throw new Error('Failed to reset cart')
     }
-})
 
+    await use()
+  },
+})
