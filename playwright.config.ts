@@ -72,9 +72,7 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    
-    
-    
+    command: process.env.CI
       ? 'cd qa-shop && npm start'
       : 'cd ../qa-shop && npm start',
     url: 'http://localhost:3000',
