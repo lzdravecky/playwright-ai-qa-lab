@@ -20,12 +20,12 @@ The feature is not implemented. These are planned acceptance checks, not execute
 
 The original exploration used `planner_setup_page`, `tests/seed.spec.ts` and `browser_snapshot` at `http://localhost:3000/`. The Products page has search, product links/navigation and four product cards with Add-to-cart buttons:
 
-| Product | Observed price |
-| --- | ---: |
-| Mechanical Keyboard | EUR 89.90 |
-| Wireless Mouse | EUR 39.90 |
-| USB-C Dock | EUR 119.00 |
-| 27-inch Monitor | EUR 249.00 |
+| Product             | Observed price |
+| ------------------- | -------------: |
+| Mechanical Keyboard |      EUR 89.90 |
+| Wireless Mouse      |      EUR 39.90 |
+| USB-C Dock          |     EUR 119.00 |
+| 27-inch Monitor     |     EUR 249.00 |
 
 Adding a product increments the Cart count. The cart opens on the product page and shows item name/price, Total, Close cart and Checkout. Promo controls are currently absent. Checkout requests Full name and Email and provides Place order. A submission with synthetic local customer data reached "Order confirmed" / "Thanks for your order"; the confirmation did not display an order amount. These observations establish navigation and fixtures, not future promo behavior.
 
@@ -66,10 +66,10 @@ Detailed input-format boundaries, rounding, tax, shipping, complex discount-base
 
 **Starting state:** Fresh state separately for each row.
 
-| Case | Products to add, one each | Subtotal | Discount (10%) | Final total |
-| --- | --- | ---: | ---: | ---: |
-| QA-010-02 | Mechanical Keyboard | EUR 89.90 | EUR 8.99 | EUR 80.91 |
-| QA-010-05 | Mechanical Keyboard, Wireless Mouse | EUR 129.80 | EUR 12.98 | EUR 116.82 |
+| Case      | Products to add, one each           |   Subtotal | Discount (10%) | Final total |
+| --------- | ----------------------------------- | ---------: | -------------: | ----------: |
+| QA-010-02 | Mechanical Keyboard                 |  EUR 89.90 |       EUR 8.99 |   EUR 80.91 |
+| QA-010-05 | Mechanical Keyboard, Wireless Mouse | EUR 129.80 |      EUR 12.98 |  EUR 116.82 |
 
 1. Add the products in the selected row and open the cart.
 2. Confirm the cart contains those products at their documented prices.
@@ -145,12 +145,12 @@ Detailed input-format boundaries, rounding, tax, shipping, complex discount-base
 
 ## Coverage summary
 
-| Acceptance criterion | Planned scenario(s) |
-| --- | --- |
-| AC1 - Promo controls | QA-010-01 |
-| AC2 - 10% discount | QA-010-02, QA-010-03, QA-010-05 data variant |
-| AC3 - Case-insensitive | QA-010-03 |
-| AC4 - Invalid message | QA-010-04; applicable second-submission variant in QA-010-06 |
-| AC5 - One promo only | QA-010-06; second-code policy partly blocked |
-| AC6 - Cart amounts | QA-010-02, QA-010-03, QA-010-05 data variant |
-| AC7 - Created-order total | QA-010-07; authoritative interface dependency |
+| Acceptance criterion      | Planned scenario(s)                                          |
+| ------------------------- | ------------------------------------------------------------ |
+| AC1 - Promo controls      | QA-010-01                                                    |
+| AC2 - 10% discount        | QA-010-02, QA-010-03, QA-010-05 data variant                 |
+| AC3 - Case-insensitive    | QA-010-03                                                    |
+| AC4 - Invalid message     | QA-010-04; applicable second-submission variant in QA-010-06 |
+| AC5 - One promo only      | QA-010-06; second-code policy partly blocked                 |
+| AC6 - Cart amounts        | QA-010-02, QA-010-03, QA-010-05 data variant                 |
+| AC7 - Created-order total | QA-010-07; authoritative interface dependency                |
