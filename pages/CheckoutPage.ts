@@ -12,10 +12,7 @@ export class CheckoutPage {
     this.orderConfirmation = page.getByRole('heading', {
       name: 'Order confirmed',
     })
-    this.orderErrorValidation = page.getByText(
-      'Full name and email are required.',
-      { exact: true },
-    )
+    this.orderErrorValidation = page.getByText('Full name and email are required.', { exact: true })
   }
 
   async fillCustomerInformation(name: string, email: string) {

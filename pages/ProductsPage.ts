@@ -24,8 +24,6 @@ export class ProductsPage {
   }
 
   async addProductToCart(product: string) {
-    await this.page
-      .getByRole('button', { name: `Add ${product} to cart` })
-      .click()
+    await this.page.getByRole('button', { name: `Add ${product} to cart` }).click()
   }
 }

@@ -79,9 +79,7 @@ test.describe('Products API', { tag: '@api' }, () => {
     expect(body.customer.name).toBe('Test User')
   })
 
-  test('returns 400 when customer information is missing', async ({
-    request,
-  }) => {
+  test('returns 400 when customer information is missing', async ({ request }) => {
     const response = await request.post('/api/orders', {
       data: {
         customer: {

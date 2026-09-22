@@ -6,14 +6,10 @@ test.describe('Products', () => {
     await page.goto('/')
   })
 
-  test(
-    'displays Products page',
-    { tag: '@smoke' },
-    async ({ page, productsPage }) => {
-      await expect(page).toHaveTitle(/QA Shop/)
-      await expect(productsPage.heading).toBeVisible()
-    },
-  )
+  test('displays Products page', { tag: '@smoke' }, async ({ page, productsPage }) => {
+    await expect(page).toHaveTitle(/QA Shop/)
+    await expect(productsPage.heading).toBeVisible()
+  })
 
   test('filters products by search', async ({ productsPage }) => {
     await productsPage.searchFor('keyboard')
@@ -38,19 +34,13 @@ test.describe('Cart flow', () => {
   })
 
   test.describe('Cart', () => {
-    test(
-      'adds product to cart',
-      { tag: '@smoke' },
-      async ({ productsPage }) => {
-        await productsPage.addProductToCart('Mechanical Keyboard')
-        await expect(productsPage.cartButton).toHaveText('Cart (1)')
-        await productsPage.cartButton.click()
+    test('adds product to cart', { tag: '@smoke' }, async ({ productsPage }) => {
+      await productsPage.addProductToCart('Mechanical Keyboard')
+      await expect(productsPage.cartButton).toHaveText('Cart (1)')
+      await productsPage.cartButton.click()
 
-        await expect(productsPage.cartContent).toContainText(
-          'Mechanical Keyboard',
-        )
-      },
-    )
+      await expect(productsPage.cartContent).toContainText('Mechanical Keyboard')
+    })
 
     test('adds multiple products to cart', async ({ productsPage }) => {
       await productsPage.addProductToCart('Mechanical Keyboard')
@@ -58,20 +48,13 @@ test.describe('Cart flow', () => {
       await expect(productsPage.cartButton).toHaveText('Cart (2)')
       await productsPage.cartButton.click()
 
-      await expect(productsPage.cartContent).toContainText(
-        'Mechanical Keyboard',
-      )
+      await expect(productsPage.cartContent).toContainText('Mechanical Keyboard')
       await expect(productsPage.cartContent).toContainText('Wireless Mouse')
     })
 
-    test('sends correct request when adding product to cart', async ({
-      page,
-      productsPage,
-    }) => {
+    test('sends correct request when adding product to cart', async ({ page, productsPage }) => {
       const requestPromise = page.waitForRequest(
-        (request) =>
-          request.url().includes('/api/cart/items') &&
-          request.method() === 'POST',
+        (request) => request.url().includes('/api/cart/items') && request.method() === 'POST',
       )
 
       await productsPage.addProductToCart('Mechanical Keyboard')
@@ -84,10 +67,7 @@ test.describe('Cart flow', () => {
       })
     })
 
-    test('shows error when adding product to cart fails', async ({
-      page,
-      productsPage,
-    }) => {
+    test('shows error when adding product to cart fails', async ({ page, productsPage }) => {
       await page.route('**/api/cart/items', async (route) => {
         await route.fulfill({
           status: 500,
@@ -100,19 +80,12 @@ test.describe('Cart flow', () => {
 
       await productsPage.addProductToCart('Mechanical Keyboard')
 
-      await expect(productsPage.statusMessage).toHaveText(
-        'Cart service unavailable',
-      )
+      await expect(productsPage.statusMessage).toHaveText('Cart service unavailable')
     })
 
-    test('receives successful response when adding product to cart', async ({
-      page,
-      productsPage,
-    }) => {
+    test('receives successful response when adding product to cart', async ({ page, productsPage }) => {
       const responsePromise = page.waitForResponse(
-        (response) =>
-          response.url().includes('/api/cart/items') &&
-          response.request().method() === 'POST',
+        (response) => response.url().includes('/api/cart/items') && response.request().method() === 'POST',
       )
 
       await productsPage.addProductToCart('Mechanical Keyboard')
@@ -127,10 +100,7 @@ test.describe('Cart flow', () => {
   })
 
   test.describe('Checkout', () => {
-    test('shows validation errors when checkout information is missing', async ({
-      productsPage,
-      checkoutPage,
-    }) => {
+    test('shows validation errors when checkout information is missing', async ({ productsPage, checkoutPage }) => {
       await productsPage.addProductToCart('Mechanical Keyboard')
       await productsPage.cartButton.click()
       await productsPage.checkoutButton.click()
@@ -139,10 +109,7 @@ test.describe('Cart flow', () => {
       await expect(checkoutPage.orderErrorValidation).toBeVisible()
     })
 
-    test('confirms order with valid customer information', async ({
-      productsPage,
-      checkoutPage,
-    }) => {
+    test('confirms order with valid customer information', async ({ productsPage, checkoutPage }) => {
       await test.step('Add product to cart', async () => {
         await productsPage.addProductToCart('Mechanical Keyboard')
         await productsPage.cartButton.click()
@@ -150,10 +117,7 @@ test.describe('Cart flow', () => {
       await test.step('Complete checkout', async () => {
         await productsPage.checkoutButton.click()
 
-        await checkoutPage.fillCustomerInformation(
-          'Test User',
-          'test@example.com',
-        )
+        await checkoutPage.fillCustomerInformation('Test User', 'test@example.com')
         await checkoutPage.placeOrderButton.click()
       })
       await test.step('Verify order confirmation', async () => {

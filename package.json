@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "format": "prettier . --write",
-    "format:check": "prettier . --check"
+    "format:check": "prettier . --check",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{js,ts,json,md,yml,yaml}": "prettier --write"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +18,8 @@
   "devDependencies": {
     "@playwright/test": "^1.63.0",
     "@types/node": "^26.6.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.5.1",
     "prettier": "^3.9.8"
   }
 }
