@@ -32,7 +32,7 @@ export class ProductsPage {
   }
 
   async searchFor(product: string) {
-    await this.page.getByLabel('Search products').fill(product)
+    await this.page.getByRole('searchbox', { name: 'Find products', exact: true }).fill(product)
   }
 
   async addProductToCart(product: string) {
