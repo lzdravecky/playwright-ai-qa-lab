@@ -27,8 +27,6 @@ test.describe('Products', () => {
 })
 
 test.describe('Cart flow', () => {
-  test.describe.configure({ mode: 'serial' })
-
   test.beforeEach(async ({ cleanCart, page }) => {
     await page.goto('/')
   })
