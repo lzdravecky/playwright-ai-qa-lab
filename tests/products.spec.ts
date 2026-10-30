@@ -107,20 +107,24 @@ test.describe('Cart flow', () => {
       await expect(checkoutPage.orderErrorValidation).toBeVisible()
     })
 
-    test('confirms order with valid customer information', async ({ productsPage, checkoutPage }) => {
-      await test.step('Add product to cart', async () => {
-        await productsPage.addProductToCart('Mechanical Keyboard')
-        await productsPage.cartButton.click()
-      })
-      await test.step('Complete checkout', async () => {
-        await productsPage.checkoutButton.click()
+    test(
+      'confirms order with valid customer information',
+      { tag: '@smoke' },
+      async ({ productsPage, checkoutPage }) => {
+        await test.step('Add product to cart', async () => {
+          await productsPage.addProductToCart('Mechanical Keyboard')
+          await productsPage.cartButton.click()
+        })
+        await test.step('Complete checkout', async () => {
+          await productsPage.checkoutButton.click()
 
-        await checkoutPage.fillCustomerInformation('Test User', 'test@example.com')
-        await checkoutPage.placeOrderButton.click()
-      })
-      await test.step('Verify order confirmation', async () => {
-        await expect(checkoutPage.orderConfirmation).toBeVisible()
-      })
-    })
+          await checkoutPage.fillCustomerInformation('Test User', 'test@example.com')
+          await checkoutPage.placeOrderButton.click()
+        })
+        await test.step('Verify order confirmation', async () => {
+          await expect(checkoutPage.orderConfirmation).toBeVisible()
+        })
+      },
+    )
   })
 })
