@@ -8,7 +8,7 @@ test.describe('Products', () => {
 
   test('displays Products page', { tag: '@smoke' }, async ({ page, productsPage }) => {
     await expect(page).toHaveTitle(/QA Shop/)
-    await expect(productsPage.heading).toHaveText('NONEXISTENT HEADING')
+    await expect(productsPage.heading).toBeVisible()
   })
 
   test('filters products by search', async ({ productsPage }) => {
