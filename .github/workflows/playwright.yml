@@ -102,6 +102,12 @@ jobs:
       - name: Run regression tests in Docker Compose
         run: docker compose run --build --rm -e CI=true playwright npx playwright test
 
+      - name: Upload report for GitHub Pages
+        if: github.event_name == 'push'
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: playwright-report/
+
       - name: Upload Docker Playwright report
         uses: actions/upload-artifact@v6
         if: ${{ !cancelled() }}
@@ -109,3 +115,23 @@ jobs:
           name: docker-playwright-report
           path: playwright-report/
           retention-days: 30
+
+  deploy-report:
+    if: github.event_name == 'push'
+    needs: docker-regression
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    concurrency:
+      group: github-pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy Playwright report to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
