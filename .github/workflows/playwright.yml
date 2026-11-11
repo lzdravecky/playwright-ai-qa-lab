@@ -8,7 +8,8 @@ on:
 
 jobs:
   regression:
-    if: github.event_name == 'push'
+    # Disabled temporarily while Docker regression is the primary CI job.
+    if: false
     timeout-minutes: 60
     runs-on: ubuntu-24.04
 
