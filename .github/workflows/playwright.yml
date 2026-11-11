@@ -86,3 +86,25 @@ jobs:
           name: smoke-report
           path: playwright-report/
           retention-days: 30
+
+docker-regression:
+    timeout-minutes: 60
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout Playwright repository
+        uses: actions/checkout@v7
+
+      - name: Checkout QA Shop for Docker Compose
+        run: git clone --depth 1 https://github.com/lzdravecky/qa-shop.git ../qa-shop
+
+      - name: Run regression tests in Docker Compose
+        run: docker compose run --build --rm -e CI=true playwright npx playwright test
+
+      - name: Upload Docker Playwright report
+        uses: actions/upload-artifact@v6
+        if: ${{ !cancelled() }}
+        with:
+          name: docker-playwright-report
+          path: playwright-report/
+          retention-days: 30
