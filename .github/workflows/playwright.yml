@@ -87,7 +87,7 @@ jobs:
           path: playwright-report/
           retention-days: 30
 
-docker-regression:
+  docker-regression:
     timeout-minutes: 60
     runs-on: ubuntu-24.04
 
