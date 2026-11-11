@@ -1,0 +1,27 @@
+services:
+  qa-shop:
+    build:
+      context: ../qa-shop
+    image: qa-shop:1.0
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://localhost:3000').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
+      interval: 2s
+      timeout: 2s
+      retries: 15
+
+  playwright:
+    build: .
+    image: playwright-ai-qa-lab:1.0
+    ipc: host
+    environment:
+      QA_SHOP_URL: http://qa-shop:3000
+    depends_on:
+      qa-shop:
+        condition: service_healthy
+    volumes:
+      - ./playwright-report:/app/playwright-report
+      - ./test-results:/app/test-results
