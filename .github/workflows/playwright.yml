@@ -112,6 +112,7 @@ jobs:
         env:
           TEST_OUTCOME: ${{ steps.tests.outcome }}
         run: |
+          sudo chown -R "$(id -u):$(id -g)" playwright-report
           printf '{"run_id":"%s","commit":"%s","result":"%s","created_at":"%s","run_url":"https://github.com/%s/actions/runs/%s"}\n' \
             "$GITHUB_RUN_ID" "$GITHUB_SHA" "$TEST_OUTCOME" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
             "$GITHUB_REPOSITORY" "$GITHUB_RUN_ID" > playwright-report/run-info.json
