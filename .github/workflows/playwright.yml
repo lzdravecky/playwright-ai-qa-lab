@@ -104,7 +104,6 @@ jobs:
 
       - name: Run regression tests in Docker Compose
         id: tests
-        continue-on-error: true
         run: docker compose run --build --rm -e CI=true playwright npx playwright test
 
       - name: Record CI run metadata
@@ -131,10 +130,6 @@ jobs:
           name: docker-playwright-report
           path: playwright-report/
           retention-days: 30
-
-      - name: Preserve regression failure
-        if: steps.tests.outcome == 'failure'
-        run: exit 1
 
   deploy-report:
     if: ${{ always() && github.event_name == 'push' && needs.docker-regression.outputs.pages_ready == 'true' }}
