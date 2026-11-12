@@ -90,6 +90,8 @@ jobs:
 
   docker-regression:
     if: github.event_name == 'push'
+    outputs:
+      pages_ready: ${{ steps['pages-upload'].outcome == 'success' }}
     timeout-minutes: 60
     runs-on: ubuntu-24.04
 
@@ -101,11 +103,23 @@ jobs:
         run: git clone --depth 1 https://github.com/lzdravecky/qa-shop.git ../qa-shop
 
       - name: Run regression tests in Docker Compose
+        id: tests
+        continue-on-error: true
         run: docker compose run --build --rm -e CI=true playwright npx playwright test
 
+      - name: Record CI run metadata
+        if: ${{ !cancelled() && hashFiles('playwright-report/index.html') != '' }}
+        env:
+          TEST_OUTCOME: ${{ steps.tests.outcome }}
+        run: |
+          printf '{"run_id":"%s","commit":"%s","result":"%s","created_at":"%s","run_url":"https://github.com/%s/actions/runs/%s"}\n' \
+            "$GITHUB_RUN_ID" "$GITHUB_SHA" "$TEST_OUTCOME" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+            "$GITHUB_REPOSITORY" "$GITHUB_RUN_ID" > playwright-report/run-info.json
+
       - name: Upload report for GitHub Pages
-        if: github.event_name == 'push'
-        uses: actions/upload-pages-artifact@v4
+        id: pages-upload
+        if: ${{ !cancelled() && hashFiles('playwright-report/index.html') != '' }}
+        uses: actions/upload-pages-artifact@v5
         with:
           path: playwright-report/
 
@@ -117,8 +131,12 @@ jobs:
           path: playwright-report/
           retention-days: 30
 
+      - name: Preserve regression failure
+        if: steps.tests.outcome == 'failure'
+        run: exit 1
+
   deploy-report:
-    if: github.event_name == 'push'
+    if: ${{ always() && github.event_name == 'push' && needs.docker-regression.outputs.pages_ready == 'true' }}
     needs: docker-regression
     runs-on: ubuntu-24.04
     permissions:
@@ -135,4 +153,4 @@ jobs:
     steps:
       - name: Deploy Playwright report to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
