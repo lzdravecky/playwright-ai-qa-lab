@@ -1,0 +1,30 @@
+
+SOURCE: GitHub Actions run #43303952920
+TEST: TEMPORARY: verify direct CI failure and Pages deployment
+BROWSER: chromium
+FILE: tests/failure-report-check.spec.ts
+
+FAILURE:
+Error: expect(received).toBe(expected)
+
+Expected: 2
+Received: 1
+
+FAILING CODE:
+await page.goto('/')
+expect(1).toBe(2)
+
+LOCATION:
+tests/failure-report-check.spec.ts:9:13
+
+RETRIES:
+The same assertion failed on the original attempt and retry.
+
+REGRESSION SUMMARY:
+90 passed
+1 failed
+2 skipped
+
+ADDITIONAL ARTIFACTS:
+Screenshot and Playwright trace were generated.
+Their contents have not been provided for this analysis.
